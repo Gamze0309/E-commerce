@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
  import { useFormik } from 'formik';
  import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -13,11 +13,14 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { getSingleUser } from '../Requests/GetSingleUser';
+import { getSingleUser } from '../Services/GetSingleUser';
+import { useSelector, useDispatch } from 'react-redux';
+import { AppDispatch, RootState } from '../Redux/store';
+import {useNavigate} from 'react-router-dom';
 
  const validate = (values: any) => {
    const errors = {username: '', password: ''};
- 
+
    if (!values.username) {
     errors.username = 'Required';
   } else if (values.username.length > 15) {
@@ -33,13 +36,22 @@ import { getSingleUser } from '../Requests/GetSingleUser';
    return errors;
  };
 
- const handleClick = () => {
-  getSingleUser()
- }
-
  const theme = createTheme();
 
  const LoginComponent = () => {
+
+  const navigate = useNavigate()
+
+  const userStatus = useSelector((state: RootState) => state.getUser.status)
+
+  const dispatch: AppDispatch = useDispatch()
+
+   useEffect(()=>{
+    console.log(userStatus)
+    if(userStatus === "Success"){
+      navigate('/home')
+    }
+   },[userStatus])
 
   const formik = useFormik({
     initialValues: {
@@ -51,6 +63,12 @@ import { getSingleUser } from '../Requests/GetSingleUser';
       alert(JSON.stringify(values, null, 2));
     },
   });
+
+  const handleClick = () => {
+    dispatch(getSingleUser(formik.values.username, formik.values.password))
+    console.log('başta')
+   }
+
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
