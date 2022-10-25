@@ -14,12 +14,17 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import ShoppingCart from '@mui/icons-material/ShoppingCart';
 import {useNavigate} from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { AppDispatch, RootState } from '../Redux/store';
+import { Divider } from '@mui/material';
 
 const settings = ['Logout'];
 
 const HeaderComponent = () => {
 
   const navigate = useNavigate()
+
+  const products = useSelector((state: RootState)=> state.shoppingCart.products)
 
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
@@ -33,12 +38,20 @@ const HeaderComponent = () => {
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
-    navigate('/shoppingCart')
   };
+
+  const handleShoppingPage = () => {
+    navigate('/shoppingCart')
+    setAnchorElNav(null);
+  }
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  const handleClickHome = () => {
+    navigate('/home')
+  }
 
   return (
     <AppBar position="static" style={{backgroundColor: '#90827F', color: '#FFFFFF'}}>
@@ -46,9 +59,8 @@ const HeaderComponent = () => {
         <Toolbar disableGutters>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
               <Button
-                onClick={handleCloseNavMenu}
+                onClick={handleClickHome}
                 sx={{ my: 2, color: 'white', display: 'block' }}
-                href='/home'
               >
                 <Typography textAlign="center">Home</Typography>
               </Button>
@@ -76,12 +88,16 @@ const HeaderComponent = () => {
               open={Boolean(anchorElNav)}
               onClose={handleCloseNavMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
+              {products.map((product) => (
+                <MenuItem key={product.product.id}>
+                  <Box component="span" sx={{ p: 1, mr: 1, border: '1px dashed grey'}}>
+                    <Typography textAlign="center">{product.quantity}</Typography>
+                  </Box>
+                  <Typography textAlign="center">{product.product.title}</Typography>
                 </MenuItem>
               ))}
-              <MenuItem onClick={handleCloseNavMenu}>
+              <Divider/>
+              <MenuItem onClick={handleShoppingPage}>
                 <Typography textAlign="center">Shopping Cart Page</Typography>
               </MenuItem>
             </Menu>

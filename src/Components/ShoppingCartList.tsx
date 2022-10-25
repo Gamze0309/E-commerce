@@ -13,11 +13,27 @@ import { useSelector, useDispatch } from 'react-redux';
 import { AppDispatch, RootState } from '../Redux/store';
 import { oneProduct } from '../Redux/Slices/oneProduct';
 import Button from '@mui/material/Button';
-import { addShoppingCart } from '../Redux/Slices/shoppingCart';
+import { addShoppingCart, removeShoppingCart } from '../Redux/Slices/shoppingCart';
+import Typography from '@mui/material/Typography';
 
 const ShoppingCartList = () => {
     
  const products = useSelector((state: RootState)=> state.shoppingCart.products)
+ const dispatch: AppDispatch = useDispatch()
+ const [sumPrice, setSumPrice] = useState(0)
+
+ const handleRemoveProduct = (product: any) => {
+  console.log(product.id)
+  dispatch(removeShoppingCart(product))
+ }
+
+ useEffect(()=>{
+  let sum = 0
+  products.map((product)=>{
+    sum += product.product.price
+  })
+  setSumPrice(sum)
+ },[products])
 
   return (
     <TableContainer component={Paper} sx={{width:'100%', alignContent:'center'}}>
@@ -39,11 +55,15 @@ const ShoppingCartList = () => {
               <TableRow>
                 <TableCell sx={{borderBottom:'none'}} align="center" width='5%' height='5%'>{'Quantity: ' + product.quantity}</TableCell>
               </TableRow>
+              <TableCell sx={{borderBottom:'none'}} align="left" height='5%'>
+                  <Button variant="contained" style={{backgroundColor: '#9C746B', color: '#FFFFFF'}} onClick={() => handleRemoveProduct(product.product)}>Remove to Cart</Button>
+              </TableCell>
               <Divider key={product.product.id}/> 
             </TableRow>
             )}
         </TableBody>
       </Table>
+      <Typography component="h1" variant="h5" sx={{float:'right', marginRight:'2%'}}>{'Total Price: ' + sumPrice}</Typography>
     </TableContainer>
   );
 }

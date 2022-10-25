@@ -4,10 +4,6 @@ import React, { useEffect } from 'react';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
@@ -51,6 +47,7 @@ import {useNavigate} from 'react-router-dom';
     if(userStatus === "Success"){
       navigate('/home')
     }
+    console.log(userStatus)
    },[userStatus])
 
   const formik = useFormik({
@@ -66,7 +63,6 @@ import {useNavigate} from 'react-router-dom';
 
   const handleClick = () => {
     dispatch(getSingleUser(formik.values.username, formik.values.password))
-    console.log('başta')
    }
 
   return (
@@ -124,6 +120,7 @@ import {useNavigate} from 'react-router-dom';
               Sign In
             </Button>
           </form>
+          {userStatus === "Error" ? <Typography textAlign="center" sx={{color:'red'}}>Username or password is wrong</Typography>: <></>}
         </Box>
       </Container>
     </ThemeProvider>

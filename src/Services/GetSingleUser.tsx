@@ -18,5 +18,8 @@ export const getSingleUser = (username: String, password: String): ThunkAction<v
         })
         .then(res=> res.status == 200? useAppDispatch(getUser({username: username, password: password, status:'Success'})): useAppDispatch(getUser({username: '', password: '', status:'Error'})))
         .then(res => console.log(res))
-        .catch(error => console.log(error)); 
+        .catch((error) => {
+            console.log(error)
+            useAppDispatch(getUser({username: '', password: '', status:'Error'}))
+        }); 
 }

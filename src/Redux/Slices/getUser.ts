@@ -13,7 +13,6 @@ const getUserSlice = createSlice({
     initialState,
     reducers: {
         getUser: (state, action: PayloadAction<{username: String, password: String, status: String}>) => {
-            console.log(action.payload)
             return{
                 ...state,
                 username: action.payload.username,

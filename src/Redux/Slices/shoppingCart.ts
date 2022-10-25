@@ -44,9 +44,15 @@ const shoppingCartSlice = createSlice({
                     products:[...state.products, {quantity: 1, product:action.payload}]
                 }
             }
+        },
+        removeShoppingCart: (state, action: PayloadAction<Product>)=>{
+            return {
+                ...state,
+                products: state.products.filter((p)=>p.product.id != action.payload.id)
+            }
         }
     }
 })
 
-export const {addShoppingCart} = shoppingCartSlice.actions
+export const {addShoppingCart, removeShoppingCart} = shoppingCartSlice.actions
 export default shoppingCartSlice.reducer
