@@ -66,7 +66,7 @@ const HeaderComponent = () => {
               </Button>
           </Box>
 
-          <Box sx={{ flexGrow: 0, marginRight:'2%' }}>
+          <Box sx={{ flexGrow: 0, }}>
             <Tooltip title="Shopping Cart">
               <IconButton onClick={handleOpenNavMenu} sx={{ p: 0 }}>
                 <ShoppingCart style={{color:'#FFFFFF', fontSize: 45}}/>

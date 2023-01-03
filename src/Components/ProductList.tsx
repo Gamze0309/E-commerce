@@ -30,20 +30,26 @@ const ProductList = () => {
  const [products, setProducts] = useState<Array<any>>([])
  const [currentPage, setCurrentPage] = useState(1);
 
+ useEffect(()=>{
+  getAllProducts().then((res)=> {
+    if(res.status == 200){
+      const product: Product[] = res.data
+      setProducts(product)
+    }
+  })
+},[])
+
  const currentData = useMemo(() => {
+  console.log('burda')
   const firstPageIndex = (currentPage - 1) * pageSize;
   const lastPageIndex = firstPageIndex + pageSize;
+  console.log(products.slice(firstPageIndex, lastPageIndex))
   return products.slice(firstPageIndex, lastPageIndex);
-}, [currentPage]);
+}, [products, currentPage]);
 
  const dispatch: AppDispatch = useDispatch()
 
- useEffect(()=>{
-    getAllProducts().then((value)=> {
-      const product: Product[] = value.data
-      setProducts(product)
-    })
- },[])
+ 
 
  const handleAddCart = (product: any) => {
   dispatch(addShoppingCart(product))
@@ -51,24 +57,20 @@ const ProductList = () => {
 
   return (
     <>
-      <TableContainer component={Paper} sx={{width:'100%', alignContent:'center'}}>
-        <Table aria-label="simple table" sx={{ margin: 'auto', width: '50%', padding: '10px' }}>
+      <TableContainer component={Paper} sx={{width:'100%'}}>
+        <Table aria-label="simple table" sx={{ margin: 'auto', width: '50%'}}>
 
           <TableBody>
             {currentData.map((product)=>
-              <TableRow key={product.id} sx={{ alignItems:'center', textAlign:'center', padding:'0%', margin:'0%'}}>
+              <TableRow key={product.id} sx={{ alignItems:'center', textAlign:'center', margin:'0px, auto'}}>
                 <TableCell sx={{borderBottom:'none', padding:'0%'}} align='right'><Link to={("/product/" + product.id)}><img src={product.image} width='100' height='100'></img></Link></TableCell>
-                <TableRow>
-                  <TableCell sx={{borderBottom:'none'}} align="center" width='5%' height='5%'>{product.title}</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell sx={{borderBottom:'none'}} align="center" width='5%' height='5%'>{product.price}</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell sx={{borderBottom:'none'}} align="center" width='5%' height='5%'>{product.category}</TableCell>
-                </TableRow>
+                <div style={{textAlign:'center', margin:'0px, auto'}}>
+                  <TableCell sx={{borderBottom:'none', display:'block',textAlign:'center', margin:'0px, auto'}}>{product.title}</TableCell>
+                  <TableCell sx={{borderBottom:'none', display:'block',textAlign:'center', margin:'0px, auto'}}>{product.price}</TableCell>
+                  <TableCell sx={{borderBottom:'none', display:'block',textAlign:'center', margin:'0px, auto'}}>{product.category}</TableCell>
+                </div>
                 <Divider key={product.id}/>
-                <TableCell sx={{borderBottom:'none'}} align="left" height='5%'>
+                <TableCell sx={{borderBottom:'none', padding:'0px'}} align="left" height='5%'>
                     <Button variant="contained" style={{backgroundColor: '#9C746B', color: '#FFFFFF'}} onClick={() => handleAddCart(product)}>Add to Cart</Button>
                 </TableCell>
               </TableRow>
